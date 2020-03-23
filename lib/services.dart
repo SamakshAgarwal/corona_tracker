@@ -19,7 +19,7 @@ fetchStats() async {
     statistics.add(
         Statistics.createObject(country, confirmed, deaths, date, recovered));
   });
-  statistics.sort((a,b)=>a.country.compareTo(b.country));
+  statistics.sort((a,b)=>int.parse(b.confirmed).compareTo(int.parse(a.confirmed)));
   return statistics;
 }
 
