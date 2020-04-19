@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
   Color pastelBlue = Color(0xff193f66);
   String filter = '';
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  FocusNode focusNode = FocusNode();
 
   @override
   void initState() {
@@ -76,6 +77,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             bottomSheetController =
                                 bottomSheet(snapshot, index);
+                            FocusScope.of(context).unfocus();
                           },
                         )
                       : snapshot.data[index].country
@@ -181,9 +183,14 @@ class _HomePageState extends State<HomePage> {
 
   changeAppBar() {
     if (icon == Icons.search) {
+      FocusScope.of(context).requestFocus(focusNode);
       setState(() {
         icon = Icons.close;
         titleWidget = TextField(
+          onTap: () {
+            bottomSheetController.close();
+          },
+          focusNode: focusNode,
           controller: textEditingController,
           style: TextStyle(color: Colors.white),
           cursorColor: Colors.white,
@@ -202,15 +209,15 @@ class _HomePageState extends State<HomePage> {
           },
         );
       });
+      bottomSheetController.close();
     } else {
       setState(() {
         icon = Icons.search;
         titleWidget = Text('Covid Situation');
-        setState(() {
-          filter = '';
-        });
+        filter = '';
         textEditingController.clear();
       });
+      bottomSheetController.close();
     }
   }
 }
